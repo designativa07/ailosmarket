@@ -1,0 +1,30 @@
+import { Repository } from 'typeorm';
+import { UsuariosService } from '../usuarios/usuarios.service';
+import { PerfilAdministrador } from './entities/perfil-administrador.entity';
+import { PerfilCooperado } from './entities/perfil-cooperado.entity';
+import { PerfilFornecedor } from './entities/perfil-fornecedor.entity';
+import { CreatePerfilAdministradorDto } from './dto/create-perfil-administrador.dto';
+import { CreatePerfilCooperadoDto } from './dto/create-perfil-cooperado.dto';
+import { CreatePerfilFornecedorDto } from './dto/create-perfil-fornecedor.dto';
+import { UpdatePerfilAdministradorDto } from './dto/update-perfil-administrador.dto';
+import { UpdatePerfilCooperadoDto } from './dto/update-perfil-cooperado.dto';
+import { UpdatePerfilFornecedorDto } from './dto/update-perfil-fornecedor.dto';
+import { UpdateHomologacaoFornecedorDto } from './dto/update-homologacao-fornecedor.dto';
+export declare class PerfisService {
+    private readonly perfilAdminRepository;
+    private readonly perfilCooperadoRepository;
+    private readonly perfilFornecedorRepository;
+    private readonly usuariosService;
+    constructor(perfilAdminRepository: Repository<PerfilAdministrador>, perfilCooperadoRepository: Repository<PerfilCooperado>, perfilFornecedorRepository: Repository<PerfilFornecedor>, usuariosService: UsuariosService);
+    private verificarUsuarioEConflitoDePerfil;
+    createPerfilAdministrador(dto: CreatePerfilAdministradorDto): Promise<PerfilAdministrador>;
+    createPerfilCooperado(dto: CreatePerfilCooperadoDto): Promise<PerfilCooperado>;
+    createPerfilFornecedor(dto: CreatePerfilFornecedorDto): Promise<PerfilFornecedor>;
+    findPerfilAdministradorByUsuarioId(usuarioId: string): Promise<PerfilAdministrador | undefined>;
+    findPerfilCooperadoByUsuarioId(usuarioId: string): Promise<PerfilCooperado | undefined>;
+    findPerfilFornecedorByUsuarioId(usuarioId: string): Promise<PerfilFornecedor | undefined>;
+    updatePerfilAdministrador(usuarioId: string, dto: UpdatePerfilAdministradorDto): Promise<PerfilAdministrador>;
+    updatePerfilCooperado(usuarioId: string, dto: UpdatePerfilCooperadoDto): Promise<PerfilCooperado>;
+    updatePerfilFornecedor(usuarioId: string, dto: UpdatePerfilFornecedorDto): Promise<PerfilFornecedor>;
+    updateStatusHomologacaoFornecedor(fornecedorUsuarioId: string, adminHomologadorId: string, dto: UpdateHomologacaoFornecedorDto): Promise<PerfilFornecedor>;
+}
