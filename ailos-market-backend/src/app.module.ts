@@ -10,6 +10,9 @@ import { SolicitacoesModule } from './solicitacoes/solicitacoes.module';
 import { AvaliacoesModule } from './avaliacoes/avaliacoes.module';
 import { IndicacoesModule } from './indicacoes/indicacoes.module';
 import { AuthModule } from './auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -22,16 +25,29 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get<string>('DB_HOST'),
-        port: parseInt(configService.get<string>('DB_PORT') || '5432', 10),
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_DATABASE'),
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'], // Caminho para as entidades (vamos criar depois)
-        synchronize: process.env.NODE_ENV !== 'production', // true em desenvolvimento para criar/atualizar tabelas automaticamente (cuidado em produção)
+        host: configService.get<string>('DB_HOST', 'localhost'),
+        port: configService.get<number>('DB_PORT', 5432),
+        username: configService.get<string>('DB_USERNAME', 'postgres'),
+        password: configService.get<string>('DB_PASSWORD', 'postgres'),
+        database: configService.get<string>('DB_DATABASE', 'ailos_market'),
+        entities: [join(__dirname, '**', '*.entity.{ts,js}')],
+        synchronize: configService.get<string>('NODE_ENV') !== 'production', // Auto-create schema (dev only)
         logging: process.env.NODE_ENV !== 'production', // Log das queries SQL em desenvolvimento
         ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false, // Adicionado para flexibilidade com SSL
       }),
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET', 'YOUR_DEFAULT_SECRET'), // It's crucial to set this in .env
+        signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN', '3600s') },
+      }),
+      inject: [ConfigService],
+      global: true, // Make JwtModule global
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'ailos-market-frontend', 'build'),
+      exclude: ['/api/(.*)'], // Exclude API routes from being served as static files
     }),
     UsuariosModule,
     PerfisModule,

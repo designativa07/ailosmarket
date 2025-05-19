@@ -1,23 +1,22 @@
 {
-  "dependencies": {
-    "@nestjs/common": "^11.1.1",
-    "@nestjs/core": "^11.1.1",
-    "@nestjs/jwt": "^11.0.0",
-    "@nestjs/passport": "^11.0.5",
-    "@nestjs/platform-express": "^11.1.1",
-    "@nestjs/typeorm": "^11.0.0",
-    "@types/bcrypt": "^5.0.2",
-    "@types/passport-jwt": "^4.0.1",
-    "@types/passport-local": "^1.0.38",
-    "bcrypt": "^6.0.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0",
-    "pg": "^8.16.0",
-    "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2",
-    "typeorm": "^0.3.24"
+  "name": "ailosmarket-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for Ailos Market frontend and backend",
+  "private": true,
+  "scripts": {
+    "build:frontend": "cd ailos-market-frontend && npm run build",
+    "start:backend": "cd ailos-market-backend && npm run start:prod",
+    "start:backend_dev": "cd ailos-market-backend && npm run start:dev",
+    "start:frontend_dev": "cd ailos-market-frontend && npm start",
+    "dev": "concurrently \"npm:start:backend_dev\" \"npm:start:frontend_dev\"",
+    "start": "npm run build:frontend && npm run start:backend",
+    "postinstall": "cd ailos-market-backend && npm install && cd ../ailos-market-frontend && npm install && cd ..",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }

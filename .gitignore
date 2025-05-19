@@ -58,4 +58,4 @@ lerna-debug.log*
 # Docusaurus
 /.docusaurus/
 /build/
-/i18n/ 
+/i18n/
